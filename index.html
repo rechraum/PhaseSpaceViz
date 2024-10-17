@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase Space Visualizations</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Phase Space Visualizations</h1>
+    <p>Select a phase space visualization below.</p>
+  </header>
+
+  <!-- Visualization Selector -->
+  <div id="visualization-selector">
+    <label for="visualization">Select Visualization:</label>
+    <select id="visualization" onchange="loadSketch()">
+      <option value="1dOscillator">1D Oscillator</option>
+      <option value="gravityWell">Gravity Well</option> <!-- Updated name -->
+      <option value="threeBody">Three-Body Problem</option>
+      <option value="energyLandscape">Energy Landscape</option>
+    </select>
+  </div>
+
+  <!-- Div for P5.js canvas -->
+  <div id="canvas-container" style="width: 800px; height: 400px;"></div>
+
+  <!-- Div for Orbital Mechanics Controls -->
+  <div id="orbital-controls" style="display: none;">
+    <button id="clearObjects">Clear Objects</button>
+    <label>
+      <input type="checkbox" id="circularCheckbox"> Circular Orbit
+    </label>
+  </div>
+
+  <!-- Div for 1D Oscillator Controls -->
+  <div id="controls" style="display: none;">
+    <button id="addOscillator">Add Oscillator</button>
+    <button id="clearOscillators">Clear Oscillators</button>
+    <!-- Added sliders div -->
+    <div id="sliders"></div>
+  </div>
+
+   <!-- Div for Three-Body Problem Controls -->
+   <div id="three-body-controls" style="display: none;">
+    <button id="startSimulation">Start Simulation</button>
+  </div>
+
+  <!-- Div for Energy Landscape Controls -->
+  <div id="energy-landscape-controls" style="display: none;">
+    <button id="createLandscape">Create Landscape</button>
+  </div>
+
+  <!-- Link to the sketch files -->
+  <script src="1DOscillator.js"></script>
+  <script src="Orbital.js"></script>
+  <script src="ThreeBody.js"></script> 
+  <script src="EnergyLandscape.js"></script>
+
+
+  <!-- JavaScript to dynamically load sketches -->
+  <script>
+    let myP5;
+
+    function loadSketch() {
+      const visualization = document.getElementById("visualization").value;
+
+      // Remove any existing sketch before creating a new one
+      if (myP5) {
+        myP5.remove();  // Removes the previous P5 instance and canvas
+      }
+
+      // Clear the canvas-container to ensure no leftover canvases
+      const canvasContainer = document.getElementById("canvas-container");
+      canvasContainer.innerHTML = '';
+
+      // Hide all controls initially
+      document.getElementById("controls").style.display = 'none';
+      document.getElementById("orbital-controls").style.display = 'none';
+      document.getElementById("three-body-controls").style.display = 'none';
+      document.getElementById("energy-landscape-controls").style.display = 'none';
+
+
+      // Load the selected sketch and show the relevant controls
+      if (visualization === "1dOscillator") {
+        myP5 = new p5(oscillatorSketch, canvasContainer);
+        document.getElementById("controls").style.display = 'flex';
+      } else if (visualization === "gravityWell") { // Updated condition
+        myP5 = new p5(orbitalSketch, canvasContainer);
+        document.getElementById("orbital-controls").style.display = 'flex';
+      } else if (visualization === "threeBody") {
+        myP5 = new p5(threeBodySketch, canvasContainer);
+        document.getElementById("three-body-controls").style.display = 'flex';
+      } else if (visualization === "energyLandscape") {
+        myP5 = new p5(energyLandscapeSketch, canvasContainer);
+        document.getElementById("energy-landscape-controls").style.display = 'flex';
+      }
+    }
+
+    // Load the default visualization on page load
+    window.onload = function () {
+      loadSketch();
+    };
+  </script>
+</body>
+</html>
