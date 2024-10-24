@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Phase Space Visualizations</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Include p5.js library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
 </head>
 <body>
@@ -18,47 +18,88 @@
     <label for="visualization">Select Visualization:</label>
     <select id="visualization" onchange="loadSketch()">
       <option value="1dOscillator">1D Oscillator</option>
-      <option value="gravityWell">Gravity Well</option> <!-- Updated name -->
+      <option value="kickedPendulum">Kicked Pendulum</option>
+      <option value="gravityWell">Gravity Well</option>
       <option value="threeBody">Three-Body Problem</option>
       <option value="energyLandscape">Energy Landscape</option>
+      <option value="lorenzAttractor">Lorenz Attractor</option>
     </select>
   </div>
 
   <!-- Div for P5.js canvas -->
   <div id="canvas-container" style="width: 800px; height: 400px;"></div>
 
-  <!-- Div for Orbital Mechanics Controls -->
-  <div id="orbital-controls" style="display: none;">
-    <button id="clearObjects">Clear Objects</button>
+  <div id="1dOscillator-controls" class="control-container">
+    <button id="addOscillator" class="control-button">Add Oscillator</button>
+    <button id="clearOscillators" class="control-button">Clear Oscillators</button>
+    <!-- Sliders for oscillator parameters will be added here -->
+    <div id="sliders"></div>
+  </div>
+
+  <!-- Div for Kicked Pendulum Controls -->
+  <div id="kickedPendulum-controls" class="control-container">
+    <button id="pendulum-start-button" class="control-button">Start Kicked Pendulum</button>
+    <button id="pendulum-pause-button" class="control-button">Pause</button>
+    <button id="pendulum-clear-button" class="control-button">Clear Phase Space</button>
+    <!-- Slider for kick strength -->
+    <div class="slider-container">
+      <input type="range" id="kick-slider" class="control-slider" min="0" max="50" value="10" step="1">
+      <label for="kick-slider">Kick Strength: <span id="kick-value">10</span></label>
+    </div>
+    <!-- Slider for damping factor -->
+    <div class="slider-container">
+      <input type="range" id="damping-slider" class="control-slider" min="0.90" max="1.00" value="0.995" step="0.001">
+      <label for="damping-slider">Damping Factor: <span id="damping-value">0.995</span></label>
+    </div>
+  </div>
+
+  <!-- Div for Gravity Well Controls -->
+  <div id="gravityWell-controls" class="control-container">
+    <button id="clearObjects" class="control-button">Clear Objects</button>
     <label>
       <input type="checkbox" id="circularCheckbox"> Circular Orbit
     </label>
   </div>
 
-  <!-- Div for 1D Oscillator Controls -->
-  <div id="controls" style="display: none;">
-    <button id="addOscillator">Add Oscillator</button>
-    <button id="clearOscillators">Clear Oscillators</button>
-    <!-- Added sliders div -->
-    <div id="sliders"></div>
-  </div>
-
-   <!-- Div for Three-Body Problem Controls -->
-   <div id="three-body-controls" style="display: none;">
-    <button id="startSimulation">Start Simulation</button>
+  <!-- Div for Three-Body Problem Controls -->
+  <div id="threeBody-controls" class="control-container">
+    <button id="startSimulation" class="control-button">Start Simulation</button>
   </div>
 
   <!-- Div for Energy Landscape Controls -->
-  <div id="energy-landscape-controls" style="display: none;">
-    <button id="createLandscape">Create Landscape</button>
+  <div id="energyLandscape-controls" class="control-container">
+    <button id="createLandscape" class="control-button">Create Landscape</button>
+  </div>
+
+  <!-- Div for Lorenz Attractor Controls -->
+  <div id="lorenzAttractor-controls" class="control-container">
+    <div id="parameter-inputs">
+      <label for="sigma-input">σ:</label>
+      <input type="number" id="sigma-input" value="10" step="0.1">
+      <label for="rho-input">ρ:</label>
+      <input type="number" id="rho-input" value="28" step="0.1">
+      <label for="beta-input">β:</label>
+      <input type="number" id="beta-input" value="2.6667" step="0.1">
+    </div>
+    <div id="preset-buttons">
+      <button id="lorenz-standard-parameters" class="control-button">Standard Parameters</button>
+      <button id="lorenz-bifurcation-visualization" class="control-button">Bifurcation Visualization</button>
+      <button id="lorenz-chaos-demonstration" class="control-button">Chaos Demonstration</button>
+      <button id="lorenz-pause-button" class="control-button">Pause</button>
+      <button id="lorenz-restart-button" class="control-button">Restart</button>
+      <button id="lorenz-reset-view-button" class="control-button">Reset View</button>
+    </div>
   </div>
 
   <!-- Link to the sketch files -->
+  <!-- It's better to include these scripts at the end of the body for better loading -->
+  <!-- Ensure that the paths to your sketch files are correct -->
   <script src="1DOscillator.js"></script>
   <script src="Orbital.js"></script>
-  <script src="ThreeBody.js"></script> 
+  <script src="ThreeBody.js"></script>
   <script src="EnergyLandscape.js"></script>
-
+  <script src="LorenzAttractor.js"></script>
+  <script src="KickedPendulum.js"></script>
 
   <!-- JavaScript to dynamically load sketches -->
   <script>
@@ -76,26 +117,31 @@
       const canvasContainer = document.getElementById("canvas-container");
       canvasContainer.innerHTML = '';
 
-      // Hide all controls initially
-      document.getElementById("controls").style.display = 'none';
-      document.getElementById("orbital-controls").style.display = 'none';
-      document.getElementById("three-body-controls").style.display = 'none';
-      document.getElementById("energy-landscape-controls").style.display = 'none';
+      // Hide all control containers
+      const controlContainers = document.querySelectorAll('.control-container');
+      controlContainers.forEach(container => {
+        container.style.display = 'none';
+      });
 
+      // Show the controls for the selected simulation
+      const controlsToShow = document.getElementById(visualization + '-controls');
+      if (controlsToShow) {
+        controlsToShow.style.display = 'block';
+      }
 
-      // Load the selected sketch and show the relevant controls
+      // Load the selected sketch
       if (visualization === "1dOscillator") {
         myP5 = new p5(oscillatorSketch, canvasContainer);
-        document.getElementById("controls").style.display = 'flex';
-      } else if (visualization === "gravityWell") { // Updated condition
+      } else if (visualization === "kickedPendulum") {
+        myP5 = new p5(kickedPendulumSketch, canvasContainer);
+      } else if (visualization === "gravityWell") {
         myP5 = new p5(orbitalSketch, canvasContainer);
-        document.getElementById("orbital-controls").style.display = 'flex';
       } else if (visualization === "threeBody") {
         myP5 = new p5(threeBodySketch, canvasContainer);
-        document.getElementById("three-body-controls").style.display = 'flex';
       } else if (visualization === "energyLandscape") {
         myP5 = new p5(energyLandscapeSketch, canvasContainer);
-        document.getElementById("energy-landscape-controls").style.display = 'flex';
+      } else if (visualization === "lorenzAttractor") {
+        myP5 = new p5(lorenzSketch, canvasContainer);
       }
     }
 

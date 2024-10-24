@@ -176,69 +176,74 @@ const oscillatorSketch = (p) => {
     }
   }
 
-  // Function to create sliders for an oscillator
-  p.createSliders = function (oscillator) {
-    const slidersDiv = document.getElementById('sliders');
+// Function to create sliders for an oscillator
+p.createSliders = function (oscillator) {
+  const slidersDiv = document.getElementById('sliders');
 
-    // Create a container for this oscillator's sliders
-    oscillator.sliderGroup = document.createElement('div');
-    oscillator.sliderGroup.className = 'slider-group';
+  // Create a container for this oscillator's sliders
+  oscillator.sliderGroup = document.createElement('div');
+  oscillator.sliderGroup.className = 'slider-group';
 
-    // Angle Slider
-    oscillator.angleSlider = p.createSliderControl('Angle', 0, p.TWO_PI, oscillator.angle, 0.01, oscillator);
+  // Angle Slider
+  oscillator.angleSlider = p.createSliderControl('Angle', 0, p.TWO_PI, oscillator.angle, 0.01, oscillator);
 
-    // Amplitude Slider
-    oscillator.amplitudeSlider = p.createSliderControl('Amplitude', 10, 200, oscillator.amplitude, 1, oscillator);
+  // Amplitude Slider
+  oscillator.amplitudeSlider = p.createSliderControl('Amplitude', 10, 200, oscillator.amplitude, 1, oscillator);
 
-    // Frequency Slider (0.1 Hz to 1 Hz)
-    oscillator.frequencySlider = p.createSliderControl('Frequency', 0.1, 1.0, oscillator.frequency, 0.01, oscillator);
+  // Frequency Slider (0.1 Hz to 1 Hz)
+  oscillator.frequencySlider = p.createSliderControl('Frequency', 0.1, 1.0, oscillator.frequency, 0.01, oscillator);
 
-    // Append sliders to the group
-    oscillator.sliderGroup.appendChild(oscillator.angleSlider.container);
-    oscillator.sliderGroup.appendChild(oscillator.amplitudeSlider.container);
-    oscillator.sliderGroup.appendChild(oscillator.frequencySlider.container);
+  // Append sliders to the group
+  oscillator.sliderGroup.appendChild(oscillator.angleSlider.container);
+  oscillator.sliderGroup.appendChild(oscillator.amplitudeSlider.container);
+  oscillator.sliderGroup.appendChild(oscillator.frequencySlider.container);
 
-    // Append the group to the sliders div
-    slidersDiv.appendChild(oscillator.sliderGroup);
-  };
+  // Append the group to the sliders div
+  slidersDiv.appendChild(oscillator.sliderGroup);
+};
 
-  // Function to create a slider control
-  p.createSliderControl = function (labelText, min, max, value, step, oscillator) {
-    const container = document.createElement('div');
 
-    const label = document.createElement('label');
-    label.innerText = labelText;
+// Function to create a slider control
+p.createSliderControl = function (labelText, min, max, value, step, oscillator) {
+  const container = document.createElement('div');
+  container.className = 'slider-container';
 
-    const slider = document.createElement('input');
-    slider.type = 'range';
-    slider.min = min;
-    slider.max = max;
-    slider.value = value;
-    slider.step = step;
+  const label = document.createElement('label');
+  label.innerText = labelText;
+  label.className = 'slider-label';
 
-    // Update oscillator property when slider changes
-    slider.addEventListener('input', () => {
-      let val = parseFloat(slider.value);
-      oscillator[labelText.toLowerCase()] = val;
+  const slider = document.createElement('input');
+  slider.type = 'range';
+  slider.min = min;
+  slider.max = max;
+  slider.value = value;
+  slider.step = step;
+  slider.className = 'control-slider'; // Add this line
 
-      // Set flag to reset phase space trajectory
-      oscillator.parametersChanged = true;
+  // Update oscillator property when slider changes
+  slider.addEventListener('input', () => {
+    let val = parseFloat(slider.value);
+    oscillator[labelText.toLowerCase()] = val;
 
-      if (labelText === 'Angle') {
-        // Update direction vector
-        oscillator.direction = p.createVector(p.cos(oscillator.angle), p.sin(oscillator.angle));
-      } else if (labelText === 'Frequency') {
-        // Update angular frequency
-        oscillator.angularFrequency = p.TWO_PI * oscillator.frequency;
-      }
-      // No action needed for Amplitude beyond setting parametersChanged
-    });
+    // Set flag to reset phase space trajectory
+    oscillator.parametersChanged = true;
 
-    container.appendChild(label);
-    container.appendChild(slider);
+    if (labelText === 'Angle') {
+      // Update direction vector
+      oscillator.direction = p.createVector(p.cos(oscillator.angle), p.sin(oscillator.angle));
+    } else if (labelText === 'Frequency') {
+      // Update angular frequency
+      oscillator.angularFrequency = p.TWO_PI * oscillator.frequency;
+    }
+    // No action needed for Amplitude beyond setting parametersChanged
+  });
 
-    return { container, slider };
-  };
+  container.appendChild(label);
+  container.appendChild(slider);
+
+  return { container, slider };
+};
+
 
   // Function to add a new oscillator
   p.addOscillator = function () {
