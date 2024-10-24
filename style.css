@@ -1,3 +1,4 @@
+/* Global Styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -43,15 +44,33 @@ p {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#controls, #orbital-controls {
-  display: flex;
-  justify-content: center;
-  margin: 10px 0;
+/* General Control Styles */
+.control-container {
+  width: 800px;
+  margin: 10px auto;
+  text-align: center;
+  display: none; /* Hide controls by default */
 }
 
-button {
-  margin: 0 10px;
+.control-container label {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.control-container input[type="number"],
+.control-container input[type="range"],
+.control-container select {
   padding: 5px;
+  margin: 0 10px;
+  font-size: 16px;
+  text-align: right;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.control-container .control-button {
+  margin: 5px 10px;
+  padding: 10px 20px;
   background-color: #007acc;
   color: white;
   border: none;
@@ -59,23 +78,160 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.control-container .control-button:hover {
   background-color: #005f99;
 }
 
-input[type="checkbox"] {
+/* Simulation-Specific Controls */
+
+/* 1D Oscillator Controls */
+#1dOscillator-controls #sliders {
+  margin-top: 20px;
+}
+
+#1dOscillator-controls .slider-group {
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+#1dOscillator-controls .slider-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#1dOscillator-controls .slider-label {
+  width: 100px;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+#1dOscillator-controls .control-slider {
+  flex: 1;
+  width: 200px;
+  padding: 0;
+  background-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+#1dOscillator-controls .control-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  background: #007acc;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+#1dOscillator-controls .control-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  background: #007acc;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+
+/* Kicked Pendulum Controls */
+#kickedPendulum-controls .control-slider {
+  width: 200px;
+  padding: 0;
+  background-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+#kickedPendulum-controls .control-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  background: #007acc;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+#kickedPendulum-controls .control-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  background: #007acc;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+/* Gravity Well Controls */
+#gravityWell-controls {
+  /* Styles for gravity well controls */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#gravityWell-controls label {
   margin-left: 10px;
+  font-weight: normal;
 }
 
-label {
-  margin-right: 5px;
-}
-
-#three-body-controls {
+/* Three-Body Problem Controls */
+#threeBody-controls {
   display: flex;
   justify-content: center;
   margin: 10px 0;
 }
+
+/* Energy Landscape Controls */
+#energyLandscape-controls {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+/* Lorenz Attractor Controls */
+#lorenzAttractor-controls #parameter-inputs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#lorenzAttractor-controls #parameter-inputs label {
+  margin: 0 5px;
+  font-weight: bold;
+}
+
+#lorenzAttractor-controls #parameter-inputs input {
+  width: 60px;
+  padding: 5px;
+  margin: 0 10px;
+  font-size: 16px;
+  text-align: right;
+}
+
+#lorenzAttractor-controls #preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#lorenzAttractor-controls #preset-buttons button {
+  margin: 5px 10px;
+  padding: 10px 20px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#lorenzAttractor-controls #preset-buttons button:hover {
+  background-color: #005f99;
+}
+
 
 /* Style for the energy landscape controls */
 #energy-landscape-controls {
@@ -83,3 +239,4 @@ label {
   justify-content: center;
   margin: 10px 0;
 }
+
