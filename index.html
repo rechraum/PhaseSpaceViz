@@ -23,6 +23,7 @@
       <option value="threeBody">Three-Body Problem</option>
       <option value="energyLandscape">Energy Landscape</option>
       <option value="lorenzAttractor">Lorenz Attractor</option>
+      <option value="doublePendulum">Double Pendulum</option>
     </select>
   </div>
 
@@ -91,6 +92,46 @@
     </div>
   </div>
 
+    <!-- Div for Double Pendulum Controls -->
+  <div id="doublePendulum-controls" class="control-container">
+    <div class="slider-group">
+      <label for="mass1-slider">Mass 1:</label>
+      <input type="range" id="mass1-slider" min="1" max="20" value="10" step="1" />
+    </div>
+    <div class="slider-group">
+      <label for="mass2-slider">Mass 2:</label>
+      <input type="range" id="mass2-slider" min="1" max="20" value="10" step="1" />
+    </div>
+    <div class="slider-group">
+      <label for="length1-slider">Length 1:</label>
+      <input type="range" id="length1-slider" min="50" max="200" value="150" step="10" />
+    </div>
+    <div class="slider-group">
+      <label for="length2-slider">Length 2:</label>
+      <input type="range" id="length2-slider" min="50" max="200" value="150" step="10" />
+    </div>
+    <div class="slider-group">
+      <label for="damping-slider">Damping:</label>
+      <input type="range" id="damping-slider" min="0.90" max="1.00" value="0.99" step="0.01" />
+    </div>
+    <div class="slider-group">
+      <label for="preset-select">Preset:</label>
+      <select id="preset-select">
+        <option value="default">Select Preset</option>
+        <option value="periodic">Periodic</option>
+        <option value="chaotic">Chaotic</option>
+      </select>
+    </div>
+    <div class="slider-group">
+      <label for="initial-angle-slider">Initial Angle (°):</label>
+      <input type="range" id="initial-angle-slider" min="90" max="180" value="90" step="1" />
+    </div>    
+    <button id="dp-start-button" class="control-button">Start</button>
+    <button id="dp-pause-button" class="control-button">Pause</button>
+    <button id="dp-reset-button" class="control-button">Reset</button>
+  </div>
+  
+
   <!-- Link to the sketch files -->
   <!-- It's better to include these scripts at the end of the body for better loading -->
   <!-- Ensure that the paths to your sketch files are correct -->
@@ -100,6 +141,7 @@
   <script src="EnergyLandscape.js"></script>
   <script src="LorenzAttractor.js"></script>
   <script src="KickedPendulum.js"></script>
+  <script src="doublePendulum.js"></script>
 
   <!-- JavaScript to dynamically load sketches -->
   <script>
@@ -142,6 +184,8 @@
         myP5 = new p5(energyLandscapeSketch, canvasContainer);
       } else if (visualization === "lorenzAttractor") {
         myP5 = new p5(lorenzSketch, canvasContainer);
+      } else if (visualization === "doublePendulum") {
+        myP5 = new p5(doublePendulumSketch, canvasContainer);
       }
     }
 
